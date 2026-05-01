@@ -30,8 +30,6 @@ function BlogPost() {
   useEffect(() => {
     if (!post) return;
     void supabase.from("page_views").insert({ path: `/blog/${slug}`, referrer: document.referrer || null });
-    void supabase.rpc("increment" as never, {} as never).catch(() => {}); // best-effort no-op if no rpc
-    // simple inline increment via update — ok for demo (RLS would block; skip silently)
   }, [post, slug]);
 
   return (
