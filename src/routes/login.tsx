@@ -77,10 +77,16 @@ function LoginPage() {
 
         <div className="rounded-3xl border border-border bg-card/80 backdrop-blur-xl p-8 shadow-soft">
           <div className="mb-6">
-            <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Restricted</div>
-            <h1 className="mt-2 text-3xl font-display font-bold">Admin sign in</h1>
+            <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground inline-flex items-center gap-1.5">
+              {needsBootstrap ? <><Crown className="w-3 h-3 text-acid" /> First-time setup</> : "Restricted"}
+            </div>
+            <h1 className="mt-2 text-3xl font-display font-bold">
+              {needsBootstrap ? "Claim your portfolio" : "Admin sign in"}
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Only the portfolio owner can access this area.
+              {needsBootstrap
+                ? "No owner exists yet. Create the admin account that will own this site."
+                : "Only the portfolio owner can access this area."}
             </p>
           </div>
 
@@ -112,12 +118,14 @@ function LoginPage() {
               className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-primary text-white font-semibold py-3 shadow-glow hover:scale-[1.01] active:scale-[0.99] transition-transform disabled:opacity-60"
             >
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-              Sign in
+              {needsBootstrap ? "Create owner & sign in" : "Sign in"}
             </button>
           </form>
 
           <p className="mt-6 text-xs text-muted-foreground text-center">
-            Public sign-up is disabled. The owner account is provisioned manually.
+            {needsBootstrap
+              ? "After this, public sign-up stays disabled. Only you can sign in."
+              : "Public sign-up is disabled. The owner account is provisioned manually."}
           </p>
         </div>
 
