@@ -1,10 +1,12 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Lock, Mail, Loader2 } from "lucide-react";
+import { Sparkles, Lock, Mail, Loader2, Crown } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { adminBootstrapStatus, bootstrapFirstAdmin } from "@/server/admin-bootstrap.functions";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -23,6 +25,12 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  const { data: bootstrap } = useQuery({
+    queryKey: ["admin-bootstrap-status"],
+    queryFn: () => adminBootstrapStatus(),
+  });
+  const needsBootstrap = bootstrap?.needsBootstrap === true;
+
   useEffect(() => {
     if (!loading && user) navigate({ to: "/admin" });
   }, [user, loading, navigate]);
@@ -30,14 +38,23 @@ function LoginPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+    try {
+      if (needsBootstrap) {
+        await bootstrapFirstAdmin({ data: { email, password } });
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Owner account created!");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Welcome back!");
+      }
+      navigate({ to: "/admin" });
+    } catch (err) {
+      toast.error((err as Error).message);
+    } finally {
+      setSubmitting(false);
     }
-    toast.success("Welcome back!");
-    navigate({ to: "/admin" });
   }
 
   return (
