@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 type Post = { id: string; title: string; slug: string; excerpt: string; published: boolean; views: number; reading_minutes: number; published_at: string | null; created_at: string; updated_at: string };
 
-export const Route = createFileRoute("/admin/blog")({
+export const Route = createFileRoute("/admin/blog/")({
   component: AdminBlog,
 });
 
