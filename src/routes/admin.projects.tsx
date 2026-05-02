@@ -241,7 +241,8 @@ function ProjectEditor({ value, onChange, onSave, onClose, saving }: {
               onKeyDown={(e) => {
                 if (e.key === "Enter" && techInput.trim()) {
                   e.preventDefault();
-                  if (!value.tech_stack.includes(techInput.trim())) set("tech_stack", [...value.tech_stack, techInput.trim()]);
+                  const t = techInput.trim();
+                  if (!value.tech_stack.includes(t)) set("tech_stack", [...value.tech_stack, t]);
                   setTechInput("");
                 }
               }}

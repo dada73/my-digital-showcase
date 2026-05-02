@@ -15,14 +15,15 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-const navItems = [
+type NavItem = { to: "/admin" | "/admin/projects" | "/admin/skills" | "/admin/blog" | "/admin/messages" | "/admin/profile"; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const navItems: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/projects", label: "Projects", icon: FolderKanban },
   { to: "/admin/skills", label: "Skills", icon: Sparkles },
   { to: "/admin/blog", label: "Blog", icon: FileText },
   { to: "/admin/messages", label: "Messages", icon: MessageSquare },
   { to: "/admin/profile", label: "Profile", icon: UserIcon },
-] as const;
+];
 
 function AdminLayout() {
   const { user, isAdmin, loading } = useAuth();
