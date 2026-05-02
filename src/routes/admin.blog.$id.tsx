@@ -69,7 +69,7 @@ function BlogEditorRoute() {
         slug: slug || slugify(title) || `post-${Date.now()}`,
         excerpt,
         cover_url: coverUrl || null,
-        content: content ?? {},
+        content: (content ?? {}) as never,
         content_text: contentText,
         published: willPublish,
         published_at: willPublish ? (post?.published_at ?? new Date().toISOString()) : null,

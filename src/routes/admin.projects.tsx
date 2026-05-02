@@ -187,9 +187,11 @@ function AdminProjects() {
   );
 }
 
+type EditorValue = Omit<Project, "id"> & { id?: string };
+
 function ProjectEditor({ value, onChange, onSave, onClose, saving }: {
-  value: NonNullable<Parameters<typeof Object>[0]> & { id?: string; title: string; description: string; long_description: string | null; image_url: string | null; tech_stack: string[]; github_url: string | null; demo_url: string | null; featured: boolean; display_order: number; source: string };
-  onChange: (v: typeof value) => void;
+  value: EditorValue;
+  onChange: (v: EditorValue) => void;
   onSave: () => void;
   onClose: () => void;
   saving: boolean;
